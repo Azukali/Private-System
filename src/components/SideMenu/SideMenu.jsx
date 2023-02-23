@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Layout, Menu, theme } from "antd";
+import { Layout, Menu } from "antd";
 import {
   UploadOutlined,
   UserOutlined,

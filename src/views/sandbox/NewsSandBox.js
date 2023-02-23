@@ -6,7 +6,7 @@ import Home from "./Home/Home";
 import UserList from "./user-manage/UserList";
 import RightList from "./right-manage/RightList";
 import RoleList from "./right-manage/RoleList";
-import NoPermission from "./nopermission/NoPermission";
+import NoPermission from "./nopermission/NoPermission.js";
 import { Layout } from "antd";
 import './NewsSandBox.css'
 
