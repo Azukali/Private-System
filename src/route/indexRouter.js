@@ -1,7 +1,7 @@
 import React from "react";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
-import NewsSandBox from "./../views/sandbox/NewsSandBox";
-import Login from "./../views/Login/Login";
+import NewsSandBox from "../views/sandbox/NewsSandBox";
+import Login from "../views/Login/Login";
 
 function indexRouter() {
   return (
