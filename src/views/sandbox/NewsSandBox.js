@@ -8,14 +8,14 @@ import RightList from "./right-manage/RightList";
 import RoleList from "./right-manage/RoleList";
 import NoPermission from "./nopermission/NoPermission.js";
 import { Layout } from "antd";
-import './NewsSandBox.css'
+import "./NewsSandBox.css";
 
 const { Content } = Layout;
 
-function NewsSandBox() {
+function NewsSandBox(props) {
   return (
     <Layout>
-      <SideMenu></SideMenu>
+      <SideMenu history={props.history} />
       <Layout>
         <TopHeader></TopHeader>
         <Content
@@ -23,9 +23,10 @@ function NewsSandBox() {
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
+            background: "#fff",
           }}
         >
-        <Switch>
+          <Switch>
             <Route path="/home" component={Home} />
             <Route path="/user-manage/list" component={UserList} />
             <Route path="/right-manage/role/list" component={RoleList} />
