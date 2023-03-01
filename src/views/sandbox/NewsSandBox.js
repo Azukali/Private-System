@@ -24,6 +24,7 @@ function NewsSandBox(props) {
             padding: 24,
             minHeight: 280,
             background: "#fff",
+            overflow: "auto",
           }}
         >
           <Switch>
