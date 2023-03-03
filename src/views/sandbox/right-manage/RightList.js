@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Button, Modal } from "antd";
+import { Table, Tag, Button, Modal, Popover, Switch } from "antd";
 import axios from "axios";
 import {
   EditOutlined,
@@ -14,7 +14,11 @@ function RightList() {
   useEffect(() => {
     axios.get("http://localhost:8000/rights?_embed=children").then((res) => {
       const list = res.data;
-      list[0].children = "";
+      list.forEach((item) => {
+        if (item.children.length === 0) {
+          item.children = "";
+        }
+      });
       setDataSource(list);
     });
   }, []);
@@ -53,16 +57,46 @@ function RightList() {
               icon={<DeleteOutlined />}
               style={{ marginRight: "1vw" }}
             ></Button>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<EditOutlined />}
-            ></Button>
+            <Popover
+              content={
+                <div style={{ textAlign: "center" }}>
+                  <Switch
+                    checked={item.pagepermisson}
+                    onChange={() => {
+                      switchMethod(item);
+                    }}
+                  />
+                </div>
+              }
+              title="配置项"
+              trigger={item.pagepermisson === undefined ? "" : "hover"}
+            >
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<EditOutlined />}
+                disabled={item.pagepermisson === undefined}
+              ></Button>
+            </Popover>
           </div>
         );
       },
     },
   ];
+
+  const switchMethod = (item) => {
+    item.pagepermisson = item.pagepermisson === 1 ? 0 : 1;
+    setDataSource([...dataSource]);
+    if (item.grade === 1) {
+      axios.patch(`http://localhost:8000/rigths/${item.id}`,{
+        pagepermisson:item.pagepermisson
+      });
+    }else{
+      axios.patch(`http://localhost:8000/rigths/children/${item.id}`,{
+        pagepermisson:item.pagepermisson
+      });
+    }
+  };
 
   const confirmMethod = (item) => {
     confirm({
@@ -80,10 +114,20 @@ function RightList() {
   };
 
   const deleteMethod = (item) => {
-    // console.log(item);
-    setDataSource(dataSource.filter((data) => data.id !== item.id));
-    axios.patch(`http://localhost:8000/posts/${item.id}`);
+    console.log(item);
+    if (item.grade === 1) {
+      setDataSource(dataSource.filter((data) => data.id !== item.id));
+      axios.delete(`http://localhost:8000/rights/${item.id}`);
+    } else {
+      let list = dataSource.filter((data) => data.id === item.rightId); //  rightId找到上一级
+      list[0].children = list[0].children.filter((data) => data.id !== item.id); // 对比出当前点击项除外的 其他项
+      console.log(list);
+      setDataSource([...dataSource]); // 重新渲染
+      axios.delete(`http://localhost:8000/children/${item.id}`);
+    }
   };
+
+  //
 
   return (
     <div>
