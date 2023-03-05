@@ -88,12 +88,12 @@ function RightList() {
     item.pagepermisson = item.pagepermisson === 1 ? 0 : 1;
     setDataSource([...dataSource]);
     if (item.grade === 1) {
-      axios.patch(`http://localhost:8000/rigths/${item.id}`,{
-        pagepermisson:item.pagepermisson
+      axios.patch(`http://localhost:8000/rights/${item.id}`, {
+        pagepermisson: item.pagepermisson,
       });
-    }else{
-      axios.patch(`http://localhost:8000/rigths/children/${item.id}`,{
-        pagepermisson:item.pagepermisson
+    } else {
+      axios.patch(`http://localhost:8000/children/${item.id}`, {
+        pagepermisson: item.pagepermisson,
       });
     }
   };
@@ -120,6 +120,7 @@ function RightList() {
       axios.delete(`http://localhost:8000/rights/${item.id}`);
     } else {
       let list = dataSource.filter((data) => data.id === item.rightId); //  rightId找到上一级
+      console.log(list);
       list[0].children = list[0].children.filter((data) => data.id !== item.id); // 对比出当前点击项除外的 其他项
       console.log(list);
       setDataSource([...dataSource]); // 重新渲染
