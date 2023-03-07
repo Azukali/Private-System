@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Popover, Switch } from "antd";
+import { Table, Button, Modal, Switch } from "antd";
 import axios from "axios";
 import {
   EditOutlined,
@@ -12,8 +12,9 @@ const { confirm } = Modal;
 function RightList() {
   const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:8000/users").then((res) => {
+    axios.get("http://localhost:8000/users?_expand=role").then((res) => {
       const list = res.data;
+      console.log(list);
       setDataSource(list);
     });
   }, []);
@@ -29,7 +30,10 @@ function RightList() {
     },
     {
       title: "角色名称",
-      dataIndex: "roleId",
+      dataIndex: "role",
+      render: (role) => {
+        return role.roleName;
+      },
     },
     {
       title: "用户名",
@@ -38,8 +42,10 @@ function RightList() {
     {
       title: "用户状态",
       dataIndex: "roleState",
-      render: () => {
-        <Switch></Switch>;
+      render: (roleState,item) => {
+       return <Switch checked={roleState} disabled={item.default} onChange={() => {
+        switchMethod(item);
+      }}></Switch>;
       },
     },
     {
@@ -55,17 +61,27 @@ function RightList() {
               shape="circle"
               icon={<DeleteOutlined />}
               style={{ marginRight: "1vw" }}
+              disabled={item.default}
             ></Button>
             <Button
               type="primary"
               shape="circle"
               icon={<EditOutlined />}
+              disabled={item.default}
             ></Button>
           </div>
         );
       },
     },
   ];
+
+  const switchMethod = (item) => {
+    item.roleState = item.roleState === true ? false : true;
+    setDataSource([...dataSource]);
+    axios.patch(`http://localhost:8000/users/${item.id}`, {
+      roleState: item.roleState,
+      });
+  };
 
   const confirmMethod = (item) => {
     confirm({

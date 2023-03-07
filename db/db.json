@@ -34,7 +34,7 @@
       "username": "诸葛山珍",
       "pinyin": "zhu ge shan zhen",
       "password": "123",
-      "roleState": true,
+      "roleState": false,
       "default": false,
       "region": "",
       "roleId": 1,
